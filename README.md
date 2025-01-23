@@ -2,12 +2,10 @@
 
 FAANG resume generator -> https://www.faangtechleads.com/resume/general-guidelines
 
-Typescript
-
+Tailwind
+ShadcnUI
 React hook forms + zod
 React-pdf
 
-Tailwind
-ShadcnUI
-
-Jest ?? Cypress
+Jest
+react-testing-library
