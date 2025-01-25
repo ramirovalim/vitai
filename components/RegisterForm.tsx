@@ -4,16 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "./hooks/use-toast";
+import { ToastAction } from "./ui/toast";
 
 const formSchema = z.object({
   username: z
@@ -23,6 +17,7 @@ const formSchema = z.object({
 });
 
 export function MyForm() {
+  const { toast } = useToast();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,14 +45,25 @@ export function MyForm() {
                 {/* Your form field */}
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
+              <FormDescription>This is your public display name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+
+        <Button
+          type="submit"
+          onClick={(e) => {
+            toast({
+              variant: "destructive",
+              title: "Username set", // optional
+              description: "Fudeu",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
+            });
+          }}
+        >
+          Submit
+        </Button>
       </form>
     </Form>
   );
