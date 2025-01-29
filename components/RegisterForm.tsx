@@ -10,7 +10,11 @@ import { useToast } from "./hooks/use-toast";
 import { ToastAction } from "./ui/toast";
 
 const formSchema = z.object({
-  username: z
+  firstName: z
+    .string()
+    .min(2, { message: "Username must be at least 2 characters." })
+    .max(50, { message: "Username must be 50 characters maximum." }),
+  lastName: z
     .string()
     .min(2, { message: "Username must be at least 2 characters." })
     .max(50, { message: "Username must be 50 characters maximum." }),
@@ -22,7 +26,8 @@ export function MyForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      firstName: "",
+      lastName: "",
     },
   });
   // 2. Define a submit handler.
@@ -37,15 +42,29 @@ export function MyForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First name</FormLabel>
+              <FormControl>
+                {/* Your form field */}
+                <Input placeholder="First" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
                 {/* Your form field */}
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Last" {...field} />
               </FormControl>
-              <FormDescription>This is your public display name.</FormDescription>
+              <FormDescription>This is your title display name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -53,7 +72,7 @@ export function MyForm() {
 
         <Button
           type="submit"
-          onClick={(e) => {
+          onClick={() => {
             toast({
               variant: "destructive",
               title: "Username set", // optional
